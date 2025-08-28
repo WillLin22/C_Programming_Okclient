@@ -1,0 +1,6 @@
+{
+  "name": "example",
+  "tests": {
+    "tests/q1.py": "ok_test"
+  }
+}
