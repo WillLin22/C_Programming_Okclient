@@ -16,11 +16,12 @@ class OkTest(models.Test):
     suites = core.List()
     description = core.String(optional=True)
 
-    def __init__(self, file, suite_map, assign_name, assignment, **fields):
+    def __init__(self, file, suite_map, assign_name, assignment, verbose, **fields):
         super().__init__(**fields)
         self.file = file
         self.suite_map = suite_map
 
+        self.verbose = verbose
         self.assignment = assignment
         self.assignment_name = assign_name
         self.run_only = None
@@ -39,8 +40,13 @@ class OkTest(models.Test):
             elif suite['type'] not in self.suite_map:
                 raise ex.SerializeException('Invalid suite type: '
                                             '{}'.format(suite['type']))
+            # For each suite in test, the OkTest instance create a corresponding 
+            # suite instance and store it inside the OkTestInst.suites. 
+            # When running protocols like unlock, it iterate through the suites 
+            # and let the Case of the Suite do the corresponding process like
+            # unlock
             self.suites[i] = self.suite_map[suite['type']](
-                    self, **suite)
+                    self, self.verbose, **suite) 
 
     def run(self, env):
         """Runs the suites associated with this OK test.
@@ -240,9 +246,10 @@ class Suite(core.Serializable):
     scored = core.Boolean(default=True)
     cases = core.List()
 
-    def __init__(self, test, **fields):
+    def __init__(self, test, verbose, **fields):
         super().__init__(**fields)
         self.test = test
+        self.verbose = verbose
         self.run_only = []
 
     def run(self, test_name, suite_number, env=None):
@@ -305,7 +312,7 @@ class Suite(core.Serializable):
             output.disable_all_logs()
             print(''.join(output_log))
             output.enable_all_logs()
-        if not success:
+        if not success or self.verbose:
             short_name = self.test.get_short_name()
             # TODO: Change when in notebook mode
             print('Run only this test case with '

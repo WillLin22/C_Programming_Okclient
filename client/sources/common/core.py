@@ -6,7 +6,9 @@ import collections
 ###############
 
 class NoValue(object):
-    pass
+    def __bool__(self):
+        return False
+
 
 NoValue = NoValue()
 

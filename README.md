@@ -103,21 +103,34 @@ test = {
 
 ## 版本信息与（或许有的）更新 
 
-v1.0.0：
+pre-released version：
 
 目前支持的test类型：
 
-- ok_test的concept，目前仅支持选择题
+- ok_test的concept，支持选择
 
 目前支持的功能：
 
 - 解密（-u）
 - 加密（--lock）
 
+v1.0.0
+
+目前支持的test类型：
+
+- ok_test的concept，支持选择（有choices项）和填空（无choices项）
+
+目前支持的功能：
+
+- 解密（-u）
+- 加密（--lock）
+- 历史记录打包（.ok_messages）
+- 选择题目（-q qname）
+- 打分功能
+- 添加了一个--reconfigure-user的选项，便于同学们若输入错误信息进行修改。
+
 目前暂时还不支持但想添加的功能：
 
-- 提交（--submit），实现将完成了的任务打包成一个加密文件并上交
 - 解包，方便快速检查同学上交文件
-- 打分功能，即用上
-- 选择题目功能（-q），目前暂时还不知道能不能用
 - 打包该项目的setuptools
+- verbose似乎没有实现应有的功能

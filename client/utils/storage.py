@@ -13,35 +13,58 @@ def create_config_directory():
         os.makedirs(CONFIG_DIRECTORY)
     return CONFIG_DIRECTORY
 
-def get_storage():
+def get_storage(key):
+    """Retrieves information from the storage.
+
+    Args:
+        key (str): The key of the information to retrieve.
+
+    Returns:
+        str: The value associated with the key, or None if not found.
+    """
     with open(CONFIG_FILE, 'rb') as fp:
         storage = pickle.load(fp)
 
-    user_email = storage['user_email']
-    return user_email
+    return storage[key]
 
-def update_storage(user_email):
-    if not user_email:
-        raise ex.ConfigException(user_email)
+def get_all_storage():
+    """Retrieves all information from the storage.
+
+    Returns:
+        dict: A dictionary containing all key-value pairs in the storage.
+    """
+    try:
+        with open(CONFIG_FILE, "rb") as f:
+            storage = pickle.load(f)
+    except Exception:
+        storage = {}
+
+    return storage
+
+def update_storage(key, info):
+    if not info:
+        raise ex.ConfigException(info)
     create_config_directory()
-    with open(CONFIG_FILE, 'wb') as fp:
-        pickle.dump({
-            'user_email' : user_email
-        }, fp)
+    storage = get_all_storage()
+
+    storage[key] = info
+
+    with open(CONFIG_FILE, "wb") as f:
+        pickle.dump(storage, f)
         
-def get_email():
+def get_info_from_input(key):
     retry = True
     times = 0
     while retry:
         retry = False
         times += 1
-        email = input("Please enter your school email: ")
+        value = input(f"Please enter your {key}: ")
         try:
-            update_storage(email)
+            update_storage(key, value)
         except ex.ConfigException as e:
-            print('Please enter a valid email address.')
+            print(f'Please enter a valid {key}.')
             log.warning(f'Retry {times}, received input: {e}')
-    return email
+    return value
 
 """Below are contents originally in storage"""
 import ctypes

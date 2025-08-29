@@ -29,15 +29,6 @@ def load(file, parameter, assign):
         log.info('Cannot import {} as an OK test'.format(file))
         raise ex.LoadingException('Cannot import {} as an OK test'.format(file))
 
-    if os.path.exists(file):
-        with open(file) as f:
-            data = f.read()
-        if encryption.is_encrypted(data):
-            decrypted, _ = assign.attempt_decryption([])
-            if file not in decrypted:
-                name = os.path.basename(filename)
-                return {name: models.EncryptedOKTest(name=name, points=1)}
-
     try:
         test = importing.load_module(file).test
         test = copy.deepcopy(test)
@@ -46,6 +37,6 @@ def load(file, parameter, assign):
 
     name = os.path.basename(filename)
     try:
-        return {name: models.OkTest(file, SUITES, assign.endpoint, assign, **test)}
+        return {name: models.OkTest(file, SUITES, assign.endpoint, assign, assign.cmd_args.verbose, **test)}
     except ex.SerializeException as e:
         raise ex.LoadingException('Cannot load OK test {}: {}'.format(file, e))

@@ -1,6 +1,6 @@
 test = {
-  'name': 'q1',
-  'points': 0,
+  'name': 'q2',
+  'points': 1,
   'suites': [
     {
       'cases': [
@@ -9,17 +9,17 @@ test = {
           'hidden': False,
           'locked': False,
           'multiline': False,
-          'question': '这是q1的一个题面'
+          'question': '这是q2的一个题面'
         },
         {
           'answer': '1',
           'hidden': False,
           'locked': False,
           'multiline': False,
-          'question': '这是q1的另一个题面'
+          'question': '这是q2的另一个题面'
         }
       ],
-      'scored': False,
+      'scored': True,
       'type': 'concept'
     }
   ]

@@ -1,6 +1,6 @@
 {
   "name": "example",
   "tests": {
-    "tests/q1.py": "ok_test"
+    "tests/q*.py": "ok_test"
   }
 }

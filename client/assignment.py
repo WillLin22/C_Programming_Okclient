@@ -95,23 +95,29 @@ class Assignment(core.Serializable):
 
     _PROTOCOLS = [
         "lock",
-        "unlock"
+        "unlock",
+        "scoring",
+        "backup" # it must be at the bottom, launching the last
     ]
     def __init__(self, args, **fields):
         self.cmd_args = args
         self.test_map = collections.OrderedDict()
         self.protocol_map = collections.OrderedDict()
+    
+    def get_student_info(self, key):
+        """Attempts to get the student's info. Returns the value. If None, an error will be given and exception will be raised"""
         
-    def get_student_email(self):
-        """Attempts to get the student's email. Returns the email. If None, an error will be given and exception will be raised"""
+        log.info(f"Attempting to get student {key}")
 
-        log.info("Attempting to get student email")
+        if self.cmd_args.reconfigure_user:
+            return get_info_from_input(key)
         
         try:
-            user_email = get_storage()
+            user_info = get_storage(key)
         except Exception as e:
-            user_email = get_email()
-        return user_email
+            log.info(f"Failed to get student {key} from storage: {e}")
+            user_info = get_info_from_input(key)
+        return user_info
 
     def post_instantiation(self):
         self._print_header()

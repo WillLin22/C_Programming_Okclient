@@ -11,6 +11,7 @@ import readline
 from datetime import datetime
 import logging
 import random
+from client.sources.common import core
 
 log = logging.getLogger(__name__)
 
